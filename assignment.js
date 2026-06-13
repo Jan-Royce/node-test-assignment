@@ -56,10 +56,10 @@ process.stdin.on('keypress', (ch, key) => {
 
   pressCount++;
 
-  if (pressCount > 3 && pressCount < 7) return;
+  // FIXED: issue #1
 
   const now = Date.now();
-  if (now - lastPressTime < 150) return;
+  if (now - lastPressTime < 50) return; // FIXED: issue #4, alternatively remove lastPressTime debounce entirely?
   lastPressTime = now;
 
   if (key.name === 'q' && !key.ctrl) {
@@ -99,7 +99,7 @@ process.stdin.on('keypress', (ch, key) => {
   } else if (activeView === VIEWS.STRATEGY) {
     if (key.name === 'escape') {
       activeView = VIEWS.MAIN;
-      cursor.main = 0;
+      // FIXED: issue #3
       drawMain();
     } else if (key.name === 'up') {
       cursor.strategy = (cursor.strategy - 1 + 4) % 4;
@@ -155,9 +155,13 @@ process.stdin.on('keypress', (ch, key) => {
       process.exit(0);
     }
   } else if (activeView === VIEWS.SETTINGS || activeView === VIEWS.HELP || activeView === VIEWS.ABOUT) {
+    // NOTE: I'm not sure if these were the screens where the enter key doesn't work
+    // if so, switching the if statements should now allow enter to also return to main menu
+    // FIXED: issue #2?
+    // if (key.name === 'escape' || key.name === 'return') {
     if (key.name === 'escape') {
       activeView = VIEWS.MAIN;
-      cursor.main = 0;
+      // FIXED: issue #3
       drawMain();
     }
   }
@@ -172,6 +176,7 @@ function drawMain() {
     console.log(color(`  ${marker} ${label}`));
   });
   console.log(chalk.gray('\n[↑/↓] [Enter] [Q]'));
+  console.log(chalk.gray('\n'));
 }
 
 function drawStrategy() {
