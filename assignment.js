@@ -176,7 +176,6 @@ function drawMain() {
     console.log(color(`  ${marker} ${label}`));
   });
   console.log(chalk.gray('\n[↑/↓] [Enter] [Q]'));
-  console.log(chalk.gray('\n'));
 }
 
 function drawStrategy() {
